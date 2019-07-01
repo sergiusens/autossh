@@ -1,0 +1,38 @@
+name: autossh
+base: core18
+version: '1.4'
+summary: autossh is a program to start a copy of ssh and monitor it
+description: |
+  Features:
+
+    - autossh is a program to start a copy of ssh and monitor it,
+      restarting it as necessary should it die or stop passing traffic.
+      The idea is from rstunnel (Reliable SSH Tunnel), but implemented in C.
+    - The author's view is that it is not as fiddly as rstunnel to get
+      to work.
+    - Connection monitoring using a loop of port forwardings or a remote
+      echo service.
+    - Backs off on rate of connection attempts when experiencing rapid
+      failures such as connection refused.
+    - Freeware. 
+
+grade: stable
+confinement: strict
+
+apps:
+  autossh:
+    command: bin/autossh
+    adapter: full
+    plugs:
+    - network
+    - ssh-keys
+    environment:
+      AUTOSSH_PATH: $SNAP/usr/bin/ssh
+
+parts:
+  autossh:
+    source: https://www.harding.motd.ca/autossh/autossh-1.4g.tgz
+    source-checksum: sha256/5fc3cee3361ca1615af862364c480593171d0c54ec156de79fc421e31ae21277
+    plugin: autotools
+    stage-packages:
+    - openssh-client
